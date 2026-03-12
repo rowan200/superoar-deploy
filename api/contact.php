@@ -10,7 +10,7 @@
 // CONFIGURATION - UPDATE THESE VALUES
 // ============================================
 $config = [
-    'recipient_email' => 'rowthepro1@superoar.com',    // Update if your receiving mailbox changes
+    'recipient_email' => 'sales@superoar.com',         // Update if your receiving mailbox changes
     'recipient_name'  => 'SUPEROAR Sales',              // Display name
     'from_email'      => 'noreply@superoar.com',        // Must be an email on your cPanel domain
     'site_name'       => 'SUPEROAR',                    // Your site name
