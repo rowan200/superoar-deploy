@@ -10,14 +10,14 @@
 // CONFIGURATION - UPDATE THESE VALUES
 // ============================================
 $config = [
-    'recipient_email' => 'rowthepro1@superoar.com',     // Your email address to receive messages
+    'recipient_email' => 'rowthepro1@superoar.com',    // Update if your receiving mailbox changes
     'recipient_name'  => 'SUPEROAR Sales',              // Display name
-    'from_email'      => 'noreply@superoar.com',        // From email on your domain
+    'from_email'      => 'noreply@superoar.com',        // Must be an email on your cPanel domain
     'site_name'       => 'SUPEROAR',                    // Your site name
     'allowed_origins' => [                               // Allowed domains (for CORS)
         'http://localhost:5173',                         // Vite dev server
         'http://localhost:3000',                         // Alternative dev server
-        'https://superoar.com',                          // Your production domain
+        'https://superoar.com',                          // Production domain
         'https://www.superoar.com',                      // www version
     ],
 ];
@@ -26,12 +26,21 @@ $config = [
 // CORS HEADERS
 // ============================================
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+$isAllowedOrigin = $origin === '' || in_array($origin, $config['allowed_origins'], true);
 
-if (in_array($origin, $config['allowed_origins'])) {
+if (!$isAllowedOrigin) {
+    http_response_code(403);
+    header("Content-Type: application/json; charset=UTF-8");
+    echo json_encode([
+        'success' => false,
+        'message' => 'Origin not allowed.'
+    ]);
+    exit();
+}
+
+if ($origin !== '') {
     header("Access-Control-Allow-Origin: $origin");
-} else {
-    // For development, you can allow all origins (remove in production for security)
-    header("Access-Control-Allow-Origin: *");
+    header("Vary: Origin");
 }
 
 header("Access-Control-Allow-Methods: POST, OPTIONS");
